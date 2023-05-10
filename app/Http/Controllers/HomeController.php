@@ -31,26 +31,26 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $req)
     {
-        // if ($request->ajax()) {
-        $sharks = User::with('images')->paginate(5);
-        // return Datatables::of($sharks)
-        //         ->addIndexColumn()
-        //         ->addColumn('action', function ($row) {
-        //             $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
-        //             return $actionBtn;
-        //         })
+        if ($req->ajax()) {
+        $sharks = User::with('images')->get();
+        return Datatables::of($sharks)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
                
-        //         ->rawColumns(['action'])
-        //         ->make(true);
-        // }
+                ->rawColumns(['action'])
+                ->make(true);
+        }
         
         $amounts = DB::table('admin_wallets')->get();
 
         // load the view and pass the sharks
 
-        return View('home')->with('sharks',$sharks)->with('amounts', $amounts);
+        return View('home')->with('amounts', $amounts);
     }
     public function search(Request $request)
     {

@@ -36,45 +36,47 @@
 
 @section('content')
 
-    <table class="table table-striped table-bordered" id="table" data-toggle="table" data-height="460"
-        data-ajax="ajaxRequest" data-search="true" data-side-pagination="server" data-pagination="true">
+    <table id="users-tables" class="table table-striped table-no-bordered table-hover">
         <thead>
             <tr>
                 <td>ID</td>
-                <td>Name</td>
-                <td>Email</td>
+                <td>name</td>
+                <td>email</td>
                 {{-- <td>shark Level</td> --}}
+                <td>reffer code</td>
+                <td>created at</td>
+                <td>updated at</td>
                 <td>Actions</td>
             </tr>
         </thead>
         <tbody>
-            @foreach ($sharks as $key => $value)
+            {{-- @foreach ($sharks as $key => $value)
                 <tr>
                     <td>{{ $value->id }}</td>
                     <td>{{ $value->name }}</td>
                     <td>{{ $value->email }}</td>
                     {{-- <td>{{ $value->shark_level }}</td> --}}
 
-                    <!-- we will also add show, edit, and delete buttons -->
-                    <td>
+            {{-- <!-- we will also add show, edit, and delete buttons -->
+                        <td>
+                            
+                            <!-- delete the shark (uses the destroy method DESTROY /sharks/{id} -->
+                            <!-- we will add this later since its a little more complicated than the other two buttons -->
+                            
+                            <!-- show the shark (uses the show method found at GET /sharks/{id} -->
+                            <a class="btn btn-small btn-success" href="{{ url('show', $value->id) }}">Show </a> --}}
 
-                        <!-- delete the shark (uses the destroy method DESTROY /sharks/{id} -->
-                        <!-- we will add this later since its a little more complicated than the other two buttons -->
-
-                        <!-- show the shark (uses the show method found at GET /sharks/{id} -->
-                        <a class="btn btn-small btn-success" href="{{ url('show', $value->id) }}">Show </a>
-
-                        <!-- edit this shark (uses the edit method found at GET /sharks/{id}/edit -->
-                        <a class="btn btn-small btn-info" href="{{ URL::to('sharks/' . $value->id . '/edit') }}">Edit
-                            this user</a>
+            <!-- edit this shark (uses the edit method found at GET /sharks/{id}/edit -->
+            {{-- <a class="btn btn-small btn-info" href="{{ URL::to('sharks/' . $value->id . '/edit') }}">Edit
+                this user</a>
                         {{-- <a href="{{ Storage::url($value->image)}}" target="_blank" download>Download</a> --}}
 
-                    </td>
+            {{-- </td>
                 </tr>
-            @endforeach
+                @endforeach  --}}
         </tbody>
     </table>
-    {{ $sharks->links() }}
+    {{-- {{ $sharks->links() }} --}}
     <div>
         <a class="btn btn-small btn-success" href="{{ url('/transactions') }}">Show all transactions </a>
     </div>
@@ -121,15 +123,70 @@
 @section('js')
     <script>
         console.log('Hi!');
-        window.addEventListener('DOMContentLoaded', event => {
-            // Simple-DataTables
-            // https://github.com/fiduswriter/Simple-DataTables/wiki
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-            const datatablesSimple = document.getElementById('datatablesSimple');
-            if (datatablesSimple) {
-                new simpleDatatables.DataTable(datatablesSimple);
-            }
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.dropdown-toggle').dropdown();
         });
+        $(function() {
+            var table = $('#users-tables').DataTable({
+                processing: true,
+                serverSide: true,
+
+                ajax: "{{ route('welcome.page') }}",
+
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email',
+                        orderable: false
+                    },
+                    {
+                        name: 'affiliate_id',
+                        data: 'affiliate_id',
+                        orderable: false
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'updated_at',
+                        name: 'updated_at'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+
+
+                ],
+
+            });
+        });
+      
+    </script>
+    <script>
         $('.coins').click(function(event) {
             $.ajax({
                 type: 'POST',
@@ -146,7 +203,32 @@
                 error: function(data) {}
             });
         });
+        
+
+
     </script>
+    <script>
+        $('.edit').click(function(event) {
+            $.ajax({
+                type: 'POST',
+                url: "edit-amount",
+                data: {
+                    add_photo_coin: add_photo_coin,
+                },
+
+                dataType: 'json',
+                async: false,
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(data) {}
+            });
+        });
+        
+
+
+    </script>
+    
 
 @stop
 @stop
