@@ -108,17 +108,7 @@ class HomeController extends Controller
                     
                     return $users->user->name;
                 })
-                // ->editColumn('type', function($users){
-                    
-                //     if($users->type == 'debit'){
-                //        $value = '<span style="color:red">'.$users->type.'</span>';
-                //        return $value;
-                //     } 
-                //     $value = '<span style="color:green">'.$users->type.'</span>';
-                   
-                //        return $users->type ;
-
-                //   })
+               
                 ->rawColumns(['action'])
                 ->make(true);
         }

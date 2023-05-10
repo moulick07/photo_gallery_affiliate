@@ -218,13 +218,9 @@ class PhotoController extends Controller
     $current_balance = $users->balance;
     if ($current_balance > $imageprice) {
 
-      $transaction = ['amount' => $imageprice, 'user_id' => Auth::id(), 'image_id' => $id, 'type' => 'credit'];
-      $success = Transaction::create($transaction);
-      // $ownerchange = Image::where('id', $id)->first();
-      // $user_id = $ownerchange->user_id;
-      // $updateowner = $ownerchange->update(array('user_id' => Auth::id()));
-      // dd($updateowner);
-      if ($success) {
+      $transaction = ['amount' => $imageprice, 'user_id' => Auth::id(), 'image_id' => $id, 'type' => 'debit'];
+      $success_debit = Transaction::create($transaction);
+      if ($success_debit) {
         $image_id = Image::with('user')->where('id', $id)->first();
         $username = User::where('id', $image_id->user_id)->first();
         $wallet_balance = Wallet::where('user_id', $username->id)->first();
@@ -232,12 +228,19 @@ class PhotoController extends Controller
         $wallet = $wallet_balance->update(['balance' => $walletbalance + $imageprice]);
         // dd($image_id->user_id);
         if ($wallet) {
-          $transactions = ['amount' => $imageprice, 'user_id' => $image_id->id, 'image_id' => $id, 'type' => 'debit'];
-          $success = Transaction::create($transaction);
-        
-
-        $newbalance = $current_balance - $imageprice;
-        $wallet = DB::table('wallets')->where('user_id', Auth::id())->update(array('balance' => $newbalance));
+          $transactions = ['amount' => $imageprice, 'user_id' => $image_id->user->id, 'image_id' => $id, 'type' => 'credit'];
+          $success = Transaction::create($transactions);
+          
+          
+          $newbalance = $current_balance - $imageprice;
+          $wallet_update = DB::table('wallets')->where('user_id', Auth::id())->update(array('balance' => $newbalance));
+          // dd($wallet_update);
+          if($wallet_update){
+          $ownerchange = Image::where('id', $id)->first();
+          $user_id = $ownerchange->user_id;
+          $updateowner = $ownerchange->update(array('user_id' => Auth::id()));
+          // dd($updateowner);
+          }
         // if($success){
         // dd($wallet);
         }

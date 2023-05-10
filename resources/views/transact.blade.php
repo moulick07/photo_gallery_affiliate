@@ -93,6 +93,9 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function() {
+            $('.dropdown-toggle').dropdown();
+        });
         $(function() {
             var table = $('#users-table').DataTable({
                 processing: true,
@@ -130,7 +133,7 @@
                     console.log(nRow);
                     if (aData.type == "debit") {
                         // dd('khaskasbd');
-                        $('tr', nRow).css('background-color', 'Tomato');
+                        $('td', nRow).css('background-color', 'Red');
                     } else {
                         $('td', nRow).css('background-color', 'MediumSeaGreen');
                     }
