@@ -37,15 +37,19 @@
             <tr>
 
                 <td><input type="text" name="image[0][title]" id="image[0][title]" placeholder="Enter your title"
-                        class="form-control"><span class="text-danger error-text image[0][tag]_err"  id="image.0.title"></span></td>
+                        class="form-control"><span class="text-danger error-text image[0][tag]_err"
+                        id="image.0.title"></span></td>
 
                 <td><input type="text" name="image[0][tag]" id="image[0][tag]" placeholder="Enter your tags"
-                        class="form-control" /><span class="text-danger error-text image[0][tag]_err"  id="image.0.tag"></span></td>
+                        class="form-control" /><span class="text-danger error-text image[0][tag]_err"
+                        id="image.0.tag"></span></td>
                 <td><input type="file" name="image[0][file]" id="file" id="image.0.file" class="imageClass"
-                         class="form-control" /><span class="text-danger error-text image[0][tag]_err"  id="image.0.file"></span></td>
+                        class="form-control" /><span class="text-danger error-text image[0][tag]_err"
+                        id="image.0.file"></span></td>
 
                 <td><input type="text" name="image[0][price]" placeholder="Enter your Price" id="image.0.price"
-                        class="form-control"/><span class="text-danger error-text image[0][tag]_err"  id="image.0.price"></span>
+                        class="form-control" /><span class="text-danger error-text image[0][tag]_err"
+                        id="image.0.price"></span>
                 </td>
 
                 <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>
@@ -72,6 +76,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"
         integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
     <script>
         $(document).ready(function() {
@@ -193,8 +198,11 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function() {
+                success: function(data) {
+                    console.log(data);
+                    // toastr.success(data.message);
                     window.location = "/";
+
                 },
                 error: function(errors) {
                     // for
@@ -207,16 +215,16 @@
                     // alert(err.Message);
                     if (errors.status === 422) {
                         var errors = $.parseJSON(errors.responseText);
-                        $.each(errors.errors, function(index,value) {
+                        $.each(errors.errors, function(index, value) {
                             // $('.error-text'+index).append(value);
-                             console.log("input[id='"+index+"']");
+                            console.log("input[id='" + index + "']");
                             //  var p = $('#'+index);
                             //  $('#image.0.title').attr('value','YOUR_VALUE');
                             // $("input[id='"+index+"']").text('<span class="text-danger">'+value+'</span>');
 
                             // $('.error-text').append('<span class="text-danger">'+value+'<span>'+'<br>');
                             // console.log(p);
-                            $("span[id='"+index+"']").append(value);
+                            $("span[id='" + index + "']").append(value);
                             // console.log(input);
                             // $(p+'<span class="text-danger">').text(value);
                             // $(input).
@@ -238,15 +246,20 @@
                     };
                 }
 
-                
-
+                // if the user select more than 1 image logic 
+                // var vidFileLength = $("#videoUploadFile")[0].files.length;
+                // if (vidFileLength === 0) {
+                //     alert("No file selected.");
+                // }
 
 
 
 
             });
-            
+
         });
     </script>
+   
+    <script scr="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
 @endsection
 @endsection

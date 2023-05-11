@@ -74,12 +74,14 @@ Route::delete('/show/delete/{id}', [PhotoController::class, 'destroy'])->name('d
 Route::get('/edit', [PhotoController::class, 'edit'])->name('edit');
 Route::post('/update/{id}', [PhotoController::class, 'update'])->name('update');
 Route::get('/purchase/{id}', [PhotoController::class, 'wallet'])->name('wallet');
-Route::get('/update-coins/{id}', [HomeController::class, 'change'])->name('change');
+Route::post('/update-coins', [HomeController::class, 'change'])->name('change');
 Route::get('/update-amount/{id}', [HomeController::class, 'update'])->name('updatecoins');
 Route::get('/transaction/{id}', [PhotoController::class, 'transaction'])->name('transaction');
 Route::get('/download/{id}', [PhotoController::class, 'download'])->name('download');
 Route::get('/transactions', [HomeController::class, 'transact'])->name('transact');
 Route::get('/search', [PhotoController::class, 'search'])->name('search');
+Route::get('/imageview',[HomeController::class, 'imagepage'])->name('imagePage');
+Route::get('/deleteByAdmin/{id}',[HomeController::class, 'imagedelete'])->name('deletebyadmin');
 // Route::get('/sortbyhightolow/{price}', [PhotoController::class, 'products'])->name('descsort');
 // Route::get('/sortbylowtohigh/{price}', [PhotoController::class, 'products'])->name('ascsort');
 // Route::get('/sortbyatoz/{title}', [PhotoController::class, 'products'])->name('nameatoz');

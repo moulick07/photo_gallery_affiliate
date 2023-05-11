@@ -134,7 +134,11 @@
     <section class="container py-5 d-flex " id="body">
 
         <div class="row g-3 mt-1  d-flex justify-content-around">
-
+            @if (session()->has('success'))
+                <script>
+                    toastr.success("{!! session()->get('success') !!}");
+                </script>
+            @endif
 
             @if (session('message'))
                 <div class="alert alert-{{ session('status') }} alert-dismissible fade show" role="alert">

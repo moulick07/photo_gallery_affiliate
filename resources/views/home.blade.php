@@ -31,11 +31,15 @@
 
 
 
-@stop
 
 
 @section('content')
-
+    <div>
+        <a class="btn btn-small btn-success" href="{{ url('/transactions') }}">Show all transactions </a>
+    </div>
+    <div class="mt-3">
+        <a class="btn btn-small btn-success" href="{{ url('/imageview') }}">Show all image uploads </a>
+    </div>
     <table id="users-tables" class="table table-striped table-no-bordered table-hover">
         <thead>
             <tr>
@@ -77,11 +81,9 @@
         </tbody>
     </table>
     {{-- {{ $sharks->links() }} --}}
+
     <div>
-        <a class="btn btn-small btn-success" href="{{ url('/transactions') }}">Show all transactions </a>
-    </div>
-    <div>
-        <table class="table table-striped table-bordered" id="table" data-toggle="table" data-height="460"
+        <table class="table table-striped mt-3 table-bordered" id="table" data-toggle="table" data-height="460"
             data-ajax="ajaxRequest" data-search="true" data-side-pagination="server" data-pagination="true">
             <thead>
                 <tr>
@@ -100,7 +102,7 @@
                     <td>{{ $values->reference_coin }}</td>
                 </tr>
                 <td>
-                    <a class="btn btn-small btn-success" href={{ route('change', $values->id) }}>change
+                    <a class="btn btn-small btn-success" id="coins">change
                         amount</a>
 
                 </td>
@@ -111,19 +113,46 @@
 
     </table>
 
+    <form action="javascript:;" id="modaldata">
+        @csrf
+        <div class="modal fade" id="new_modal_plan">
+            <div class="modal-dialog">
+                <div class="modal-content">
 
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">edit photo coins</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
 
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="add_photo_coin" class="col-form-label">add photo coins:</label>
+                                <input type="text" value="" class="form-control" id="add_photo_coin">
+                            </div>
+                            <div class="mb-3">
+                                <label for="reference_coin" class="col-form-label">Referral coin:</label>
+                                <input class="form-control" value="" id="reference_coin">
+                            </div>
+                    </div>
 
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" id="btn-save" class="btn btn-danger" data-dismiss="modal">Close</button>
 
-@section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+                        <button type="button" class="btn btn-success" id="savedata" data-dismiss="modal">save
+                            changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
 
 
 @section('js')
-    <script>
-        console.log('Hi!');
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -137,6 +166,7 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function() {
             $('.dropdown-toggle').dropdown();
@@ -146,7 +176,7 @@
                 processing: true,
                 serverSide: true,
 
-                ajax: "{{ route('welcome.page') }}",
+                ajax: "{{ route('index') }}",
 
                 columns: [{
                         data: 'id',
@@ -184,51 +214,43 @@
 
             });
         });
-      
     </script>
     <script>
-        $('.coins').click(function(event) {
-            $.ajax({
-                type: 'POST',
-                url: "edit-amount",
-                data: {
-                    add_photo_coin: add_photo_coin,
-                },
+        $(document).ready(function() {
+            $('#coins').click(function(e) {
+                $('#new_modal_plan').modal('show');
+                // $('#btn-save').val("add");
+                $('#savedata').click(function(e) {
 
-                dataType: 'json',
-                async: false,
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(data) {}
+                    e.preventDefault();
+                    var data1 = $('#add_photo_coin').val();
+                    var data2 = $('#reference_coin').val();
+                    
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'POST',
+                        url: 'update-coins',
+                        dataType: 'json',
+                        async: false,
+                        data: {
+                            'add_photo_coin':data1,
+                            'reference_coin':data2
+                        },
+                        success: function(data) {
+                            window.location = "home";
+
+                            console.log(data);
+                        },
+                        error: function(data) {}
+                    });
+                });
             });
         });
-        
-
-
     </script>
-    <script>
-        $('.edit').click(function(event) {
-            $.ajax({
-                type: 'POST',
-                url: "edit-amount",
-                data: {
-                    add_photo_coin: add_photo_coin,
-                },
-
-                dataType: 'json',
-                async: false,
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(data) {}
-            });
-        });
-        
 
 
-    </script>
-    
 
 @stop
 @stop

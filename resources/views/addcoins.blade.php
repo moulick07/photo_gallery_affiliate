@@ -16,7 +16,7 @@
                     <h3 class="text-light fw-bold">Edit Post</h3>
                   </div>
                   <div class="card-body p-4">
-                    <form action={{ route('updatecoins',$raw->id) }} method="get" enctype="multipart/form-data">
+                    <form action="javascript:;" method="get" enctype="multipart/form-data">
                       @csrf
                       {{-- @method('PUT') --}}
                       <div class="my-2">

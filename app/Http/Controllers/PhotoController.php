@@ -149,7 +149,7 @@ class PhotoController extends Controller
 
     // dd($id);
 
-    return response()->json(['message' => 'success'], 200);
+    return response()->json(['success'=> true,'message' => 'successfully uploaded image'], 200);
 
 
   }
