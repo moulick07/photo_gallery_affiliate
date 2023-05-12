@@ -45,7 +45,9 @@ class PhotoController extends Controller
   }
   public function create()
   {
-    return view('create');
+    $wallet = Wallet::with('user')->get();
+    $transactions = Transaction::with('user')->get();
+    return view('create')->with('wallet', $wallet)->with('transactions', $transactions);
   }
 
   /*

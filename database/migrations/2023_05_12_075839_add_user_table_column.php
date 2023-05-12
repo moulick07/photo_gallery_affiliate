@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnWalletTable extends Migration
+class AddUserTableColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,10 @@ class AddColumnWalletTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-         $table->integer('wallet')->default(10);
+            $table->string('referred_by')->nullable();
+            $table->string('affiliate_id')->nullable();
+            $table->string('referred_id')->nullable();
+            
         });
     }
 
@@ -25,7 +28,7 @@ class AddColumnWalletTable extends Migration
      */
     public function down()
     {
-        Schema::table('user', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

@@ -1,12 +1,7 @@
 @extends('photogallery.master')
 
 <body>
-    {{-- <div
-        class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0"> --}}
-
-    {{-- <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block"> --}}
-
-    </div>
+   </div>
 
 
     <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
@@ -133,14 +128,11 @@
 
     <section class="container py-5 d-flex " id="body">
 
-        <div class="row g-3 mt-1  d-flex justify-content-around">
-            @if (session()->has('success'))
-                <script>
-                    toastr.success("{!! session()->get('success') !!}");
-                </script>
-            @endif
+        <div class="row g-3 mt-1  d-flex justify-content-around" id="toster">
+            
 
             @if (session('message'))
+               
                 <div class="alert alert-{{ session('status') }} alert-dismissible fade show" role="alert">
                     <strong>{{ session('message') }}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
