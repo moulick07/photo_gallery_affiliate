@@ -124,17 +124,3 @@
 
 @section('js')
 
-
-{{-- 
-@section('auth_footer')
-    <p class="my-0">
-        <a href="{{ $login_url }}">
-            {{ __('adminlte::adminlte.i_already_have_a_membership') }}
-        </a>
-    </p>
-@stop
-<div class="input-group-append">
-    <div class="input-group-text">
-        <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
-    </div>
-</div> --}}

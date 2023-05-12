@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\CreatePhoto;
 use Illuminate\Http\Request;
 use App\Models\Image;
 use App\Models\User;
@@ -22,26 +23,16 @@ class PhotoController extends Controller
   // this function wil run in single route for sorting the data acording to price high low and sorting with title
   public function index(Request $request)
   {
-    // dd($request->all()); 
-    // $posts = DB::table('images')->paginate(3);
-    // $filt = Input::get('columname');
+   
     $posts = Image::with('user')
-      // ->where(function ($query) use ($request) {
-      //   if ($request->has('columname')) {
-      //    ;
-      //   }
-      // })
+     
       ->orderBy($request->columname ?? 'created_at', $request->sort ?? 'DESC')->paginate(8);
 
-    // ->paginate(8);
+   
     $wallet = Wallet::with('user')->get();
     $transactions = Transaction::with('user')->get();
-    // dd($wallet);
-    // dd($wallet);
-    // dd($wallet);
-    // dd($wallet);
+   
     return view('welcome')->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions);
-    // return view('welcome', compact('posts'));
   }
   public function create()
   {
@@ -63,30 +54,13 @@ class PhotoController extends Controller
   public function store(UserStoreRequest $request)
   {
 
-    // $total= count($request->al());
-    // dd($total);
-    // dd('jhadfkasd');
+  
     $image = $request['image'];
-    // dd($image);
-
-    // $request['image']->validate([
-    //   'title' => 'required|',
-    //   'price' => 'required|',
-    //   'tag' => 'required|',
-    //   // 'file' => 'required|mimes:png,jpg,jpeg|max:2048'
-    // ]);
-
-    // dd(count($request->all()));
-    // dd($input);
-    // $condition = $input['name'];
-    // foreach ($input as $key => $condition) {
-    // dd($request['image']);
+   
 
     for ($i = 0; $i < count($image); $i++) {
 
-      // dd($image[$i]['title']);
-      # code...
-      // dd($image->file[]);
+     
       $imageName = time() . '.' . $image[$i]['file']->extension();
       # code...
       // print($image[$i]);
@@ -98,16 +72,13 @@ class PhotoController extends Controller
 
 
 
-
-
-      // dd($image);
-      // $request->image->move(public_path('images'), $imageName);
-      // $input = $request->all();
+    $user = User::findOrFail($imagecreate->user_id);
 
       if ($imagecreate) {
+        \Notification::send($user, new CreatePhoto($image));
         if (Wallet::where('user_id', auth::user()->id)->first()) {
           $photo_price = DB::table('admin_wallets')->get();
-          // dd($photo_price);
+        
 
           foreach ($photo_price as $key => $value) {
             $addcoin = $value->add_photo_coin;
@@ -119,10 +90,7 @@ class PhotoController extends Controller
           foreach ($wallettable as $key => $value) {
             $addcoins = $value->balance;
           }
-          // dd($addcoins);
-          // $newbalance = $addcoin + $addcoins;
-          // $id = auth::user()->id;
-          // dd($newbalance);
+         
           $users = Wallet::where('user_id', auth::user()->id)->first();
           $current_balance = $users->balance;
           // dd($users->balance);
@@ -147,10 +115,7 @@ class PhotoController extends Controller
     }
 
     $posts = Image::with('user')->paginate(4);
-    // $wallet=Wallet::with('user');
-
-    // dd($id);
-
+   
     return response()->json(['success'=> true,'message' => 'successfully uploaded image'], 200);
 
 
@@ -159,8 +124,8 @@ class PhotoController extends Controller
   {
     // dd("sdfsdf");
     $posts = DB::table('images')->where('id', $id)->get();
-
-    return view('show')->with('posts', $posts);
+    $wallet = Image::with('user')->get();
+    return view('show')->with('posts', $posts)->with('wallet',$wallet);
   }
   public function edit($id)
   {
@@ -203,19 +168,15 @@ class PhotoController extends Controller
   }
   public function transaction(Request $request, $id)
   {
-    // $posts = Image::with('user');
+    
     $transactions = Transaction::with('user')->get();
-    // dd($transactions);
-    // dd($transactions);
+   
     $price = DB::table('images')->where('id', $id)->get();
     foreach ($price as $key => $value) {
       $imageprice = $value->price;
 
     }
-    // $wallet = DB::table('wallets')->get();
-    // foreach ($wallet as $key => $value) {
-    // $balance = $value->balance;
-    // }
+   
     $users = Wallet::where('user_id', auth::user()->id)->first();
     $current_balance = $users->balance;
     if ($current_balance > $imageprice) {
@@ -256,9 +217,7 @@ class PhotoController extends Controller
 
 
     }
-    // $ownerchange = Image::where('id', $id)->first();
-    // $user_id = $ownerchange->user_id;
-    // $updateowner = $ownerchange->update(array('user_id' => Auth::id()));
+  
 
   }
   public function download($id)
@@ -273,22 +232,12 @@ class PhotoController extends Controller
   public function search(Request $request)
   {
     $q = $request->search;
-    // dd($request->search);
-    // $image= Image::with('user')->paginate(8);
-    // $posts = DB::table('users')->where('name', 'LIKE', '%' . $q . '%')->get()->toArray();
-    // $posts = Image::with('user')->where('tags', 'LIKE', '%' . $q . '%')->whereOr('name','LIKE', '%' . $q . '%')->paginate(8);
-    // dd($posts);
+   
     $posts = Image::with('user')
       ->whereHas('user', function ($query) use ($request) {
-        // if ($request->search == 'flower' || $request->search == 'animal' || $request->search == 'nature'|| $request->search == 'others') {
-        // dd('jhasvjasd');
-  
+       
         $query->where('name', 'LIKE', '%' . $request->search . '%');
-        // }
-        // else{
-        //   // dd('hhhh');
-        // $query->whereOr('name', 'LIKE', '%' . $request->search  . '%');
-        // }
+       
       })->orWhere('tags', 'LIKE', '%' . $request->search . '%')->paginate(8);
 
     $wallet = Wallet::all();
@@ -302,65 +251,10 @@ class PhotoController extends Controller
 
 
 
-    // return view('searchbyname')->with(['message' => 'sorry no search found!', 'status' => 'info']); 
-
-
-    // return redirect('/')->with(['message' => 'sorry no user found', 'status' => 'info'])->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions);
-
-    // return view('searchbyname')->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions);
-
-    // if ($request->ajax()) {
-    //   $output = "";
-    //   $products = DB::table('images')->where('tags', 'LIKE', '%' . $request->search . "%")->get();
-    //   // if ($products) {
-    //   //   foreach ($products as $key => $product) {
-    //   //     $output .= '<tr>' .
-    //   //       '<td>' . $product->id . '</td>' .
-    //   //       '<td>' . $product->title . '</td>' .
-    //   //       '<td>' . $product->tags . '</td>' .
-    //   //       // '<td>' . $product->image. '</td>' .
-    //   //       '</tr>';
-    //   //   }
-    //     return response()->json([$products]);
-    //   }
+   
   }
 
 
-// public function products(Request $request,$col)
-// {
-//   // $posts= DB::table('images')->orderBy('price','desc')->get();
-//   // dd($posts);
-//   // $posts = Image::with('user')->orderBy('price', 'desc')->paginate(8);
-//   $wallet = Wallet::with('user')->get();
-//   $transactions = Transaction::with('user')->get();
-//   // // dd($wallet);
-//   // // dd($wallet);
-//   // // dd($wallet);
-//   // // dd($wallet);
 
-
-//   $posts = Image::orderBy($columnname,$request->sort ?? 'ASC')->paginate(8);
-
-//   // return view
-//   return view('welcome')->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions);
-
-
-
-
-// }
 }
 
-// public function sortasc()
-// {
-//   // $posts= DB::table('images')->orderBy('price','desc')->get();
-//   // dd($posts);
-//   $posts = Image::with('user')->orderBy('price', 'asc')->paginate(8);
-//   $wallet = Wallet::with('user')->get();
-//   $transactions = Transaction::with('user')->get();
-//   // dd($wallet);
-//   // dd($wallet);
-//   // dd($wallet);
-//   // dd($wallet);
-//   return view('welcome')->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions);
-// }
-// }

@@ -140,10 +140,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"
             integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+            
 
         <script>
             $(document).ready(function() {
@@ -267,9 +268,14 @@
                     contentType: false,
                     success: function(data) {
                         console.log(data);
+
                         toastr.success(data.message);
 
-                        window.location = "/";
+                        setTimeout(function () {
+                            window.location = "/";
+                        }, 1000);
+                        
+                        // window.location = "/";
 
                     },
                     error: function(errors) {

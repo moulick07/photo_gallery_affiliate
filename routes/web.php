@@ -23,46 +23,16 @@ use Illuminate\Support\Facades\Log;
 Route::get('/', [PhotoController::class, 'index'])->name('welcome.guest');
 
 
-// Route::get('/demo', function () {
-//     return view('demo');
-//  });
-// Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
-//  Route::middleware(['auth', 'isAdmin'])->group(function () {
-// Route::get('/admin', function () {
-//   return view('welcomee');
-// })->name('dashboard');
-
-// Auth::routes();
-
-// Route::post('/posts',[MarketController::class,'store'])->name('store');
-// Route::get('/', function () {
-//     return view('auth.login');
-// }); 
-
-// }); 
-
-
-
-
-// Route::get('welcome-page',[PhotoController::class,'index']);
 
 Route::get('home', [HomeController::class, 'index'])->name('index');
-// Route::get('/addphoto/{$id}',[App\Http\Controllers\MarketController::class, 'show'])->name('addphoto.show');
-Auth::routes();
-// Route::get('/welcome', [App\Http\Controllers\MarketController::class, 'index'])->name('welcome');
-// Route::post('/register', [RegisterController::class, 'create'])->name('register');
-// Route::get('show/{$id}', [App\Http\Controllers\HomeController::class, 'show'])->name('show');
 
-// Route::resource('user', UserController::class);
-// Route::get('addphoto/{$id}', [MarketController::class,'show'])->name('addphoto');
+Auth::routes();
+
 Route::group(['middleware' => ['auth', 'isAdmin']], function () {
 
-    Route::get('/welcomepage', [PhotoController::class, 'index'])->name('welcome.page');
     Route::get('/settings', [App\Http\Controllers\HomeController::class, 'settings'])->name('settings');
+    Route::get('/welcomepage', [PhotoController::class, 'index'])->name('welcome.page');
 
 });
 Route::get('/create', [PhotoController::class, 'index'])->name('create');
@@ -82,21 +52,7 @@ Route::get('/transactions', [HomeController::class, 'transact'])->name('transact
 Route::get('/search', [PhotoController::class, 'search'])->name('search');
 Route::get('/imageview',[HomeController::class, 'imagepage'])->name('imagePage');
 Route::get('/deleteByAdmin/{id}',[HomeController::class, 'imagedelete'])->name('deletebyadmin');
-// Route::get('/sortbyhightolow/{price}', [PhotoController::class, 'products'])->name('descsort');
-// Route::get('/sortbylowtohigh/{price}', [PhotoController::class, 'products'])->name('ascsort');
-// Route::get('/sortbyatoz/{title}', [PhotoController::class, 'products'])->name('nameatoz');
-// Route::get('/sortbyztoa/{title}', [PhotoController::class, 'products'])->name('nameztoa');
 
-
-
-// Route::get('buy/{cookies}', function ($cookies) {
-//     $wallet = Auth::user()->wallet;
-//     Auth::user()->update(['wallet' => auth::user()->wallet - $cookies * 1]);
-//     // dd( Auth::user()->wallet );
-//     Log:info(['User ' . Auth::user()->name . ' have bought ' . $cookies . ' cookies']); // we need to log who ordered and how much
-//     return 'Success, you have bought ' . $cookies . ' cookies!';
-
-// });
 
 Route::get('/logout', function(){
         Auth::logout();
