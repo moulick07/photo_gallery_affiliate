@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserTableColumn extends Migration
+class ChangeColumnWalletsUuid extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class AddUserTableColumn extends Migration
      */
     public function up()
     {
-        // Schema::table('users', function (Blueprint $table) {
-        //     $table->string('referred_by')->nullable();
-        //     $table->string('affiliate_id')->nullable();
-        //     $table->string('referred_id')->nullable();
-            
-        // });
+        Schema::table('wallets', function (Blueprint $table) {
+            $table->uuid('id');
+        });
     }
 
     /**
@@ -28,7 +25,7 @@ class AddUserTableColumn extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('wallets', function (Blueprint $table) {
             //
         });
     }

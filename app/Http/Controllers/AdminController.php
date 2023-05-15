@@ -16,7 +16,7 @@ use App\Models\Image;
 use DataTables;
 
 
-class HomeController extends Controller
+class AdminController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -137,6 +137,7 @@ class HomeController extends Controller
             //  dd($post);
 
             \Notification::send($user, new DeleteImage($post));
+            
         }
         $images = Image::with('user')->paginate(10);
 

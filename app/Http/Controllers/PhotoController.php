@@ -26,7 +26,7 @@ class PhotoController extends Controller
    
     $posts = Image::with('user')
      
-      ->orderBy($request->columname ?? 'created_at', $request->sort ?? 'DESC')->paginate(8);
+      ->orderBy($request->columname ?? 'created_at', $request->sort ?? 'DESC')->paginate(12);
 
    
     $wallet = Wallet::with('user')->get();

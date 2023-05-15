@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UuidTrait;
+
 
 class Wallet extends Model
 {
-    use HasFactory;
+    use HasFactory,UuidTrait;
     protected $fillable = [
-        'balance','user_id'
+        'balance','user_id',
       ];
 
       public function product()

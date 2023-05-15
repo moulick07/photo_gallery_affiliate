@@ -21,6 +21,7 @@ protected $data;
      public function __construct($data)
     {
         $this->data = $data;
+        
     }
 
     /**
@@ -44,11 +45,12 @@ protected $data;
     {
         return (new MailMessage)
                     ->line('The image you upload has been deleted by admin .')
-                    ->line($this->data['title'])
-                    ->line($this->data['price'])
-                    ->line($this->data['tags'])
-                    ->line($this->data['imagename'])
+                    ->line('image title is '.$this->data['title'])
+                    ->line('image price is '.$this->data['price'])
+                    ->line('image tag is  '.$this->data['tags'])
+                    ->attach(public_path('images/'.$this->data['imagename']))
                     ->line('Thank you for using our photo gallery !');
+                    
     }
 
     /**

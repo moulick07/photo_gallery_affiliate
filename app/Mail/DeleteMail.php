@@ -29,6 +29,7 @@ class DeleteMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        dd($this);
+        // return $this->view('view.name');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\UuidTrait;
 
 
 class Image extends Model
@@ -14,7 +15,7 @@ class Image extends Model
          'price','title','tags','imagename','user_id',
        ];
        
-       
+      protected $preventLazyLoading = true;
       public function product()
      {
        return $this->belongsTo('App\User', 'user_id');

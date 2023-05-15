@@ -102,7 +102,7 @@
                 </div>
             </header>
             <!-- Section-->
-            <form action={{ route('search') }} method="get">
+            <form action={{ route('search') }} method="get" loading="lazy">
                 {{ csrf_field() }}
 
                 <div class="d-flex justify-content-center">
@@ -126,7 +126,7 @@
 
     </div>
 
-    <section class="container py-5 d-flex " id="body">
+    <section class="container py-5 d-flex " id="body" loading="lazy">
 
         <div class="row g-3 mt-1  d-flex justify-content-around" id="toster">
 
@@ -160,7 +160,7 @@
                                     </div>
                                     <div class="image">
                                         <a href={{ route('show', $row->id) }}>
-                                            <img src="{{ url('images/' . $row->imagename) }}" width="300px"
+                                            <img src="{{ url('images/' . $row->imagename) }}"  width="300px"
                                                 height="200">
                                         </a>
                                     </div>
