@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateColumnWalletTable extends Migration
+class AddColumnAffiliateIdTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class UpdateColumnWalletTable extends Migration
      */
     public function up()
     {
-        Schema::table('wallets', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            // $table->foreign('user_id')->references('id')->on('users');
-
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('referred_by')->nullable();
+                $table->string('affiliate_id')->nullable();
+                $table->string('referred_id')->nullable();
         });
     }
 
@@ -27,7 +27,7 @@ class UpdateColumnWalletTable extends Migration
      */
     public function down()
     {
-        Schema::table('wallets', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

@@ -126,8 +126,8 @@
 
     </div>
 
-    <section class="container py-5 d-flex " id="body" loading="lazy">
 
+    <section class="container py-5 d-flex " id="body" loading="lazy">
         <div class="row g-3 mt-1  d-flex justify-content-around" id="toster">
 
 
@@ -160,7 +160,7 @@
                                     </div>
                                     <div class="image">
                                         <a href={{ route('show', $row->id) }}>
-                                            <img src="{{ url('images/' . $row->imagename) }}"  width="300px"
+                                            <img src="{{ url('images/' . $row->imagename) }}" width="300px"
                                                 height="200">
                                         </a>
                                     </div>
@@ -174,21 +174,21 @@
                         <p> owned by : {{ $row->user->name }}</p>
                         @foreach ($transactions as $key => $value)
                         @endforeach
-                            @if (Route::has('login'))
-                                @if ($value->user_id == Auth::id() && $value->user_id == $row->user->id)
-                                    <button class="btn btn-danger"><a href={{ route('download', $row->id) }}>
-                                            download
-                                        </a></button>
-                                @elseif (!Route::has('login'))
-                                    <button class="btn btn-danger"><a href={{ route('login', $row->id) }}>
-                                            add to cart
-                                        </a></button>
-                                @else
-                                    <button class="btn btn-danger"><a href={{ route('wallet', $row->id) }}> add to
-                                            cart
-                                        </a></button>
-                                @endif
+                        @if (Route::has('login'))
+                            @if ($value->user_id == Auth::id() && $value->user_id == $row->user->id)
+                                <button class="btn btn-danger"><a href={{ route('download', $row->id) }}>
+                                        download
+                                    </a></button>
+                            @elseif (!Route::has('login'))
+                                <button class="btn btn-danger"><a href={{ route('login', $row->id) }}>
+                                        add to cart
+                                    </a></button>
+                            @else
+                                <button class="btn btn-danger"><a href={{ route('wallet', $row->id) }}> add to
+                                        cart
+                                    </a></button>
                             @endif
+                        @endif
 
 
 
@@ -201,9 +201,14 @@
         </div>
 
     </section>
+
     <div class="d-flex justify-content-center">
 
         {{ $posts->appends(Request::except('page'))->links() }}
+    </div>
+    <div class="social-btn-sp d-flex justify-content-center">
+        <h4>share our page</h4><br><br>
+        {!! $shareButtons1 !!}
     </div>
     <!-- Footer-->
     <footer class="py-5 bg-dark">
@@ -215,7 +220,7 @@
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
-  
+
 
 
     </div>

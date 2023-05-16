@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminWalletsTable extends Migration
+class AddColumnTransactionIdImageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateAdminWalletsTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_wallets', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->float('add_photo_coin');
-            $table->float('reference_coin');
-            $table->timestamps();
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->uuid('user_id')->references('id')->on('users');
+            $table->uuid('image_id')->references('id')->on('images');
         });
     }
 
@@ -28,6 +26,8 @@ class CreateAdminWalletsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_wallets');
+        Schema::table('transactions', function (Blueprint $table) {
+            //
+        });
     }
 }

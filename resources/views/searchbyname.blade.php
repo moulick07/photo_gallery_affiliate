@@ -41,9 +41,10 @@
                         </div>
 
                         <div>
-                            <a class="btn btn-default btn-flat float-right btn-block" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" >logout</a>
+                            <a class="btn btn-default btn-flat float-right btn-block" href="#"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">logout</a>
                             <form id="logout-form" action={{ route('logout') }} method="POST" style="display: none;">
-                              {{ csrf_field() }}
+                                {{ csrf_field() }}
                             </form>
                         </div>
                         {{-- <button class="btn " ><a href={{ route('addphoto') }}>add photos</a></button> --}}
@@ -116,7 +117,7 @@
                 <a href="{{ url('/') }}?columname=price&sort=ASC" style="color:black">Low to high</a>|
                 <a href="{{ url('/') }}?columname=title&sort=DESC">Z to A</a>|
                 <a href="{{ url('/') }}?columname=title&sort=ASC">A to Z</a>
-        
+
             </div>
             @if (session('message'))
                 <div class="alert alert-{{ session('status') }} alert-dismissible fade show" role="alert">
@@ -161,26 +162,10 @@
                         <p> owned by : {{ $row->user->name }}</p>
                         @foreach ($transactions as $key => $value)
                         @endforeach
-                        @auth
-                            @if (Route::has('login'))
-                                @if ($value->user_id == Auth::id() || $value->user_id == $row->user->id)
-                                    <button class="btn btn-danger"><a href={{ route('download', $row->id) }}>
-                                            download
-                                        </a></button>
-                                @elseif ($value->user_id == Auth::id() || $value->user_id == $row->user->id)
-                                    <button class="btn btn-danger"><a href={{ route('wallet', $row->id) }}>
-                                            download
-                                        </a></button>
-                                @else
-                                <button class="btn btn-danger"><a href={{ route('wallet', $row->id) }}> add to cart
-                                    </a></button>
+                     
 
-                                @endif
-                            @endif
-                        @endauth
-
-                        {{-- <button class="btn btn-danger"><a href={{ route('login') }}> add to cart
-                            </a></button> --}}
+                        <button class="btn btn-danger"><a href={{ route('login') }}> add to cart
+                            </a></button>
                     </div>
 
                 </div>

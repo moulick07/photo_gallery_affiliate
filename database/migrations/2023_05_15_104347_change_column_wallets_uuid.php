@@ -13,9 +13,9 @@ class ChangeColumnWalletsUuid extends Migration
      */
     public function up()
     {
-        Schema::table('wallets', function (Blueprint $table) {
-            $table->uuid('id');
-        });
+        // Schema::table('wallets', function (Blueprint $table) {
+        //     $table->uuid('id');
+        // });
     }
 
     /**

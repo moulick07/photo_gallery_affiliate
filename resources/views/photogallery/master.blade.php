@@ -23,7 +23,50 @@
             background: rgba(0, 0, 0, 0.75) url("/your_loading_image.gif") no-repeat center center;
             z-index: 99999;
         }
+
+        /* #social-links ul {
+            padding-left: 0;
+        }
+
+        #social-links ul li {
+            display: inline-block;
+        }
+
+        #social-links ul li a {
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 1px;
+            font-size: 25px;
+        }
+
+        #social-links .fa-facebook {
+            color: #0d6efd;
+        }
+
+        #social-links .fa-twitter {
+            color: deepskyblue;
+        }
+
+        #social-links .fa-linkedin {
+            color: #0e76a8;
+        }
+
+        #social-links .fa-whatsapp {
+            color: #25D366
+        }
+
+        #social-links .fa-reddit {
+            color: #FF4500;
+            ;
+        }
+
+        #social-links .fa-telegram {
+            color: #0088cc;
+        } */
     </style>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     {{-- <script src="https://unpkg.com/ag-grid-community@26.2.1/dist/ag-grid-community.min.nostyle.js"></script> --}}
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@26.2.1/dist/styles/ag-grid.css">
     <link rel="stylesheet" href="https://unpkg.com/ag-grid-community@26.2.1/dist/styles/ag-theme-alpine.css">
@@ -89,10 +132,10 @@
 </script>
 <script>
     $(function() {
-    $( "form" ).submit(function() {
-        $('#loader').show();
+        $("form").submit(function() {
+            $('#loader').show();
+        });
     });
-});
 </script>
 
 </html>

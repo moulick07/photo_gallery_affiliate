@@ -23,16 +23,25 @@ class PhotoController extends Controller
   // this function wil run in single route for sorting the data acording to price high low and sorting with title
   public function index(Request $request)
   {
-   
+    $shareButtons1 = \Share::page(
+      config('APP_URL')
+    )
+      ->facebook()
+      ->twitter()
+      ->linkedin()
+      ->telegram()
+      ->whatsapp()
+      ->reddit();
+
     $posts = Image::with('user')
-     
+
       ->orderBy($request->columname ?? 'created_at', $request->sort ?? 'DESC')->paginate(12);
 
-   
+
     $wallet = Wallet::with('user')->get();
     $transactions = Transaction::with('user')->get();
-   
-    return view('welcome')->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions);
+
+    return view('welcome')->with('posts', $posts)->with('wallet', $wallet)->with('transactions', $transactions)->with('shareButtons1', $shareButtons1);
   }
   public function create()
   {
@@ -54,13 +63,13 @@ class PhotoController extends Controller
   public function store(UserStoreRequest $request)
   {
 
-  
+
     $image = $request['image'];
-   
+
 
     for ($i = 0; $i < count($image); $i++) {
 
-     
+
       $imageName = time() . '.' . $image[$i]['file']->extension();
       # code...
       // print($image[$i]);
@@ -72,13 +81,16 @@ class PhotoController extends Controller
 
 
 
-    $user = User::findOrFail($imagecreate->user_id);
+      $user = User::findOrFail($imagecreate->user_id);
 
       if ($imagecreate) {
+
+        $transactions = ['amount' => $imagecreate->price, 'user_id' => auth::id(), 'image_id' => $imagecreate->id, 'type' => 'credit'];
+        Transaction::create($transactions);
         \Notification::send($user, new CreatePhoto($image));
         if (Wallet::where('user_id', auth::user()->id)->first()) {
           $photo_price = DB::table('admin_wallets')->get();
-        
+
 
           foreach ($photo_price as $key => $value) {
             $addcoin = $value->add_photo_coin;
@@ -90,7 +102,7 @@ class PhotoController extends Controller
           foreach ($wallettable as $key => $value) {
             $addcoins = $value->balance;
           }
-         
+
           $users = Wallet::where('user_id', auth::user()->id)->first();
           $current_balance = $users->balance;
           // dd($users->balance);
@@ -115,8 +127,8 @@ class PhotoController extends Controller
     }
 
     $posts = Image::with('user')->paginate(4);
-   
-    return response()->json(['success'=> true,'message' => 'successfully uploaded image'], 200);
+
+    return response()->json(['success' => true, 'message' => 'successfully uploaded image'], 200);
 
 
   }
@@ -125,7 +137,7 @@ class PhotoController extends Controller
     // dd("sdfsdf");
     $posts = DB::table('images')->where('id', $id)->get();
     $wallet = Image::with('user')->get();
-    return view('show')->with('posts', $posts)->with('wallet',$wallet);
+    return view('show')->with('posts', $posts)->with('wallet', $wallet);
   }
   public function edit($id)
   {
@@ -168,16 +180,19 @@ class PhotoController extends Controller
   }
   public function transaction(Request $request, $id)
   {
-    
+
     $transactions = Transaction::with('user')->get();
-   
+
     $price = DB::table('images')->where('id', $id)->get();
     foreach ($price as $key => $value) {
       $imageprice = $value->price;
 
     }
-   
     $users = Wallet::where('user_id', auth::user()->id)->first();
+    if($users==null){
+      return redirect('/')->with(['message' => 'sorry you dont have enough wallet balance to buy kindly upload photo to get coins!', 'status' => 'info']);
+    }
+    else{
     $current_balance = $users->balance;
     if ($current_balance > $imageprice) {
 
@@ -193,32 +208,29 @@ class PhotoController extends Controller
         if ($wallet) {
           $transactions = ['amount' => $imageprice, 'user_id' => $image_id->user->id, 'image_id' => $id, 'type' => 'credit'];
           $success = Transaction::create($transactions);
-          
-          
+
+
           $newbalance = $current_balance - $imageprice;
           $wallet_update = DB::table('wallets')->where('user_id', Auth::id())->update(array('balance' => $newbalance));
           // dd($wallet_update);
-          if($wallet_update){
-          $ownerchange = Image::where('id', $id)->first();
-          $user_id = $ownerchange->user_id;
-          $updateowner = $ownerchange->update(array('user_id' => Auth::id()));
-          // dd($updateowner);
+          if ($wallet_update) {
+            $ownerchange = Image::where('id', $id)->first();
+            $user_id = $ownerchange->user_id;
+            $updateowner = $ownerchange->update(array('user_id' => Auth::id()));
+            // dd($updateowner);
           }
-        // if($success){
-        // dd($wallet);
         }
+        return redirect('/')->with('wallet', $wallet)->with('success', $success)->with('transactions', $transactions);
       }
-      return redirect('/')->with('wallet', $wallet)->with('success', $success)->with('transactions', $transactions);
-    }
-
-     else {
+    } else {
 
       return redirect('/')->with(['message' => 'sorry you dont have enough coin to buy!', 'status' => 'info']);
 
 
     }
-  
+  }
 
+    // dd($current_balance);
   }
   public function download($id)
   {
@@ -232,12 +244,12 @@ class PhotoController extends Controller
   public function search(Request $request)
   {
     $q = $request->search;
-   
+
     $posts = Image::with('user')
       ->whereHas('user', function ($query) use ($request) {
-       
+
         $query->where('name', 'LIKE', '%' . $request->search . '%');
-       
+
       })->orWhere('tags', 'LIKE', '%' . $request->search . '%')->paginate(8);
 
     $wallet = Wallet::all();
@@ -251,10 +263,9 @@ class PhotoController extends Controller
 
 
 
-   
+
   }
 
 
 
 }
-

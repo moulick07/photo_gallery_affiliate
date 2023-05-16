@@ -14,7 +14,7 @@ class CreateWalletsTable extends Migration
     public function up()
     {
         Schema::create('wallets', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->float('balance')->default(0);
             $table->timestamps();
         });

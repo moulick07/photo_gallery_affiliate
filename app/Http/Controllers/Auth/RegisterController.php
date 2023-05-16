@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Http\Requests\RegisterRequest;
+
 
 class RegisterController extends Controller
 {
@@ -51,15 +53,15 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone' => ['required', 'min:10,max:10'],
-        ]);
-    }
+    // protected function validator(array $data)
+    // {
+    //     return Validator::make($data, [
+    //         'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'string', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:users'],
+    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
+    //         'phone' => ['required', 'min:10,max:10'],
+    //     ]);
+    // }
 
     /**
      * Create a new user instance after a valid registration.
@@ -67,39 +69,40 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    protected function create(RegisterRequest $request)
     {
-        $ref = DB::table('users')->where('affiliate_id', $data['referred_id'])->first();
+        $ref = DB::table('users')->where('affiliate_id', $request['referred_id'])->first();
         
-        if($data['referred_id']){
-        $users = Wallet::where('user_id', $ref->id)->first();
-        if ($users) {
-            $current_balance = $users->balance;
-            $photo_price = DB::table('admin_wallets')->get();
-            foreach ($photo_price as $key => $value) {
-                $addcoin = $value->reference_coin;
+        if($request['referred_id']){
+            $users = Wallet::where('user_id', $ref->id)->first();
+            if ($users) {
+                $current_balance = $users->balance;
+                $photo_price = DB::table('admin_wallets')->get();
+                foreach ($photo_price as $key => $value) {
+                    $addcoin = $value->reference_coin;
+                    
+                }
+                $wallet = $users->update(['balance' => $current_balance + $addcoin]);
                 
-            }
-            $wallet = $users->update(['balance' => $current_balance + $addcoin]);
-            
-        } else {
-            $photo_price = DB::table('admin_wallets')->get();
-            foreach ($photo_price as $key => $value) {
-                $addcoin = $value->reference_coin;
-                
-            }
-            $postData = ['balance' => $addcoin, 'user_id' =>$ref->id];
-            $wallet = Wallet::create($postData);
+            } else {
+                $photo_price = DB::table('admin_wallets')->get();
+                foreach ($photo_price as $key => $value) {
+                    $addcoin = $value->reference_coin;
+                    
+                }
+                $postData = ['balance' => $addcoin, 'user_id' =>$ref->id];
+                $wallet = Wallet::create($postData);
         }}
         
-       return  User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'phone' => $data['phone'],
+         User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+            'phone' => $request['phone'],
+            'referal_code' => str::random(10),
             'affiliate_id' => str::random(10),
-            'referred_id' => $data['referred_id'],
-        ]);
+            'referred_id' => $request['referred_id'],
+         ]);
         
         // Auth::login($login->name);
 
