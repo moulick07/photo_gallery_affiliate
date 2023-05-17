@@ -87,7 +87,7 @@ class PhotoController extends Controller
 
         $transactions = ['amount' => $imagecreate->price, 'user_id' => auth::id(), 'image_id' => $imagecreate->id, 'type' => 'credit'];
         Transaction::create($transactions);
-        \Notification::send($user, new CreatePhoto($image));
+        
         if (Wallet::where('user_id', auth::user()->id)->first()) {
           $photo_price = DB::table('admin_wallets')->get();
 
@@ -176,6 +176,14 @@ class PhotoController extends Controller
 
     return view('purchase')->with('posts', $posts);
   }
+
+/*|--------------------------------------------------------------------------
+  | transaction function 
+  |--------------------------------------------------------------------------
+  | for all the transaction by checking the condition whether the user has wallet balance or not 
+  | or user has wallet or not 
+ */
+
   public function transaction(Request $request, $id)
   {
 
@@ -202,7 +210,7 @@ class PhotoController extends Controller
         $wallet_balance = Wallet::where('user_id', $username->id)->first();
         $walletbalance = $wallet_balance->balance;
         $wallet = $wallet_balance->update(['balance' => $walletbalance + $imageprice]);
-        // dd($image_id->user_id);
+      
         if ($wallet) {
           $transactions = ['amount' => $imageprice, 'user_id' => $image_id->user->id, 'image_id' => $id, 'type' => 'credit'];
           $success = Transaction::create($transactions);
@@ -210,12 +218,12 @@ class PhotoController extends Controller
 
           $newbalance = $current_balance - $imageprice;
           $wallet_update = DB::table('wallets')->where('user_id', Auth::id())->update(array('balance' => $newbalance));
-          // dd($wallet_update);
+
           if ($wallet_update) {
             $ownerchange = Image::where('id', $id)->first();
             $user_id = $ownerchange->user_id;
             $updateowner = $ownerchange->update(array('user_id' => Auth::id()));
-            // dd($updateowner);
+          
           }
         }
         return redirect('/')->with('wallet', $wallet)->with('success', $success)->with('transactions', $transactions);
@@ -228,7 +236,7 @@ class PhotoController extends Controller
     }
   }
 
-    // dd($current_balance);
+   
   }
   public function download($id)
   {

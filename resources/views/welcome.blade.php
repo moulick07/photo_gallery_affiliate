@@ -104,12 +104,12 @@
                 </div>
             </header>
             <!-- Section-->
-            <h3 class="d-flex justify-content-center mt-2 mb-2" >Welcome Admin</h3>
             <div class="d-flex justify-content-center">
-
+                
                 @auth
-                    @if (Auth::user()->user_type == 1)
-                    <a class="btn btn-success mt-4" href={{ route('index') }}>click here to go dashboard </a>
+                @if (Auth::user()->user_type == 1)
+                <h3 class="d-flex justify-content-center mt-2 mb-2" >Welcome Admin</h3>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    <a class="btn btn-success mt-2" href={{ route('index') }}> <h4> click here to go dashboard </h3></a>
                     @endif
                 @endauth
             </div>
@@ -165,7 +165,7 @@
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            {{-- <i class="fa fa-star"></i> --}}
+                                            
                                         </div>
                                         <h6 class="text-muted ml-1"> ratings: 4/5</h6>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                                        

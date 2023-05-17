@@ -5,6 +5,10 @@ namespace App\Observers;
 use App\Models\Image;
 use App\Models\Wallet;
 use Auth;
+use Notification;
+use App\Notifications\CreatePhoto;
+use App\Models\User;
+
 
 class PhotoObserver
 {
@@ -17,7 +21,9 @@ class PhotoObserver
     public function created(Image $image)
     {   
         // $balances = \DB::table('Image')->find('user_id');
-        
+       
+        $user = User::findOrFail($image->user_id);
+        Notification::send($user, new CreatePhoto($image));
     //  $data = $balances;
     //  dd($data);
         
