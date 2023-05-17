@@ -24,7 +24,7 @@
             data-ajax="ajaxRequest" data-search="true" data-side-pagination="server" data-pagination="true">
             <thead>
                 <tr>
-                    <td>id</td>
+                    {{-- <td>id</td> --}}
                     <td>price</td>
                     <td>title</td>
                     <td>tags</td>

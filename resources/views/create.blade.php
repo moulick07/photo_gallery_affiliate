@@ -274,7 +274,7 @@
 
                         setTimeout(function() {
                             window.location = "/";
-                        }, 1000);
+                        }, 800);
 
                         // window.location = "/";
 

@@ -31,6 +31,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::get('home', [AdminController::class, 'index'])->name('index');
 
+    
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
     Route::get('/search-user', [AdminController::class, 'search'])->name('search.user');
     Route::get('/welcomepage', [PhotoController::class, 'index'])->name('welcome.page');
@@ -39,7 +40,6 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function () {
     Route::get('/transactions', [AdminController::class, 'transact'])->name('transact');
     Route::get('/imageview',[AdminController::class, 'imagepage'])->name('imagePage');
     Route::get('/deleteByAdmin/{id}',[AdminController::class, 'imagedelete'])->name('deletebyadmin');
-    
 });
 
 

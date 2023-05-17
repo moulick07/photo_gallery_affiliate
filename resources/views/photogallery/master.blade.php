@@ -24,7 +24,7 @@
             z-index: 99999;
         }
 
-        /* #social-links ul {
+        #social-links ul {
             padding-left: 0;
         }
 
@@ -63,7 +63,7 @@
 
         #social-links .fa-telegram {
             color: #0088cc;
-        } */
+        }
     </style>
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>

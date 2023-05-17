@@ -18,8 +18,10 @@
             <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
             <!-- Bootstrap icons-->
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
             <!-- Core theme CSS (includes Bootstrap)-->
-            {{-- <link href="css/styles.css" rel="stylesheet" /> --}}
+            <link href="css/styles.css" rel="stylesheet" />
         </head>
 
         <body>
@@ -102,6 +104,15 @@
                 </div>
             </header>
             <!-- Section-->
+            <h3 class="d-flex justify-content-center mt-2 mb-2" >Welcome Admin</h3>
+            <div class="d-flex justify-content-center">
+
+                @auth
+                    @if (Auth::user()->user_type == 1)
+                    <a class="btn btn-success mt-4" href={{ route('index') }}>click here to go dashboard </a>
+                    @endif
+                @endauth
+            </div>
             <form action={{ route('search') }} method="get" loading="lazy">
                 {{ csrf_field() }}
 
@@ -156,7 +167,8 @@
                                             <i class="fa fa-star"></i>
                                             {{-- <i class="fa fa-star"></i> --}}
                                         </div>
-                                        <h6 class="text-muted ml-1"> ratings: 4/5</h6>
+                                        <h6 class="text-muted ml-1"> ratings: 4/5</h6>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                       
                                     </div>
                                     <div class="image">
                                         <a href={{ route('show', $row->id) }}>
@@ -172,6 +184,7 @@
 
 
                         <p> owned by : {{ $row->user->name }}</p>
+                        <h6 class="text-muted ml-1">created at: {{ \Carbon\Carbon::parse($row->created_at)->diffForHumans() }}</h6>
                         @foreach ($transactions as $key => $value)
                         @endforeach
                         @if (Route::has('login'))
@@ -180,6 +193,7 @@
                                         download
                                     </a></button>
                             @elseif (!Route::has('login'))
+                            
                                 <button class="btn btn-danger"><a href={{ route('login', $row->id) }}>
                                         add to cart
                                     </a></button>
@@ -207,7 +221,7 @@
         {{ $posts->appends(Request::except('page'))->links() }}
     </div>
     <div class="social-btn-sp d-flex justify-content-center">
-        <h4>share our page</h4><br><br>
+        share our page
         {!! $shareButtons1 !!}
     </div>
     <!-- Footer-->
@@ -219,8 +233,9 @@
     </footer>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Core theme JS-->
-
+    <script src="{{ asset('js/share.js') }}"></script>
 
 
     </div>

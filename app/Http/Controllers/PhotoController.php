@@ -105,13 +105,11 @@ class PhotoController extends Controller
 
           $users = Wallet::where('user_id', auth::user()->id)->first();
           $current_balance = $users->balance;
-          // dd($users->balance);
-          // $users = DB::table('wallets')->where('user_id', $id);
-          // dd($users);
+          
           $wallet = $users->update(['balance' => $current_balance + $addcoin]);
         } else {
           $photo_price = DB::table('admin_wallets')->get();
-          // dd($photo_price);
+        
 
           foreach ($photo_price as $key => $value) {
             $addcoin = $value->add_photo_coin;
@@ -123,7 +121,7 @@ class PhotoController extends Controller
         }
 
       }
-      // dd($wallet);
+   
     }
 
     $posts = Image::with('user')->paginate(4);
@@ -134,7 +132,7 @@ class PhotoController extends Controller
   }
   public function show(Request $request, $id)
   {
-    // dd("sdfsdf");
+   
     $posts = DB::table('images')->where('id', $id)->get();
     $wallet = Image::with('user')->get();
     return view('show')->with('posts', $posts)->with('wallet', $wallet);

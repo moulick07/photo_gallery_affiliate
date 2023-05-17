@@ -45,15 +45,16 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    protected function redirectTo()
+    protected function redirect()
 {
-    if(Auth::user()->user_type == 1) //1 = Admin Login
+    if(Auth::user()->user_type === 1) //1 = Admin Login
     {
-        return 'home';
+         return redirect('home');
+       
     }
-    elseif(Auth::user()->user_type == 'NULL') // Normal or Default User Login
+    elseif(Auth::user()->user_type === 'NULL') // Normal or Default User Login
     {
-        return 'welcome';
+        return redirect('welcomee');
     }
 
     

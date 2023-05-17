@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class RegisterRequest extends FormRequest
 {
     /**
@@ -13,7 +14,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
     /**
      * Get the validation rules that apply to the request.
@@ -22,12 +23,13 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-                    'name' => ['required', 'string', 'max:255'],
-                    'email' => ['required', 'string', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:users'],
-                    'password' => ['required', 'string', 'min:8', 'confirmed'],
-                    'phone' => ['required', 'min:10,max:10'],
-        ];
+       return [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'phone' => ['required', 'min:10,max:10','integer'],
+            
+       ];
         
     }
 }

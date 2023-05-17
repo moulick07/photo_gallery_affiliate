@@ -53,15 +53,15 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    // protected function validator(array $data)
-    // {
-    //     return Validator::make($data, [
-    //         'name' => ['required', 'string', 'max:255'],
-    //         'email' => ['required', 'string', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:users'],
-    //         'password' => ['required', 'string', 'min:8', 'confirmed'],
-    //         'phone' => ['required', 'min:10,max:10'],
-    //     ]);
-    // }
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'phone' => ['required', 'min:10,max:10','integer'],
+        ]);
+    }
 
     /**
      * Create a new user instance after a valid registration.
@@ -69,11 +69,12 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(RegisterRequest $request)
+    protected function create(array $data)
     {
-        $ref = DB::table('users')->where('affiliate_id', $request['referred_id'])->first();
         
-        if($request['referred_id']){
+        $ref = DB::table('users')->where('affiliate_id', $data['referred_id'])->first();
+        
+        if($data['referred_id']){
             $users = Wallet::where('user_id', $ref->id)->first();
             if ($users) {
                 $current_balance = $users->balance;
@@ -94,16 +95,16 @@ class RegisterController extends Controller
                 $wallet = Wallet::create($postData);
         }}
         
-         User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-            'phone' => $request['phone'],
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
             'referal_code' => str::random(10),
             'affiliate_id' => str::random(10),
-            'referred_id' => $request['referred_id'],
+            'referred_id' => $data['referred_id'],
          ]);
-        
+        return $user;
         // Auth::login($login->name);
 
         // return redirect()->route('welcome.guest');

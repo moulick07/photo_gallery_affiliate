@@ -18,17 +18,15 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check())
-        {
-            if(Auth::user()->user_type)
-            {
-                return redirect('home');
-            }
-            
-                return $next($request);
-            
+        if (Auth::guard()->check()) {
+            if(Auth::user()->user_type ==null)
+            return redirect('home');
         }
+        return $next($request);
         
-    
-}
+
+
+
+
+    }
 }

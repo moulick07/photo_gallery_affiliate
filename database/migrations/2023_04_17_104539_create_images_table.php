@@ -18,7 +18,7 @@ class CreateImagesTable extends Migration
             $table->float('price');
             $table->string('title');
             $table->enum('tags', ['flower', 'nature','animal','others']);
-            $table->unsignedBigInteger('user_id');
+            // $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }
