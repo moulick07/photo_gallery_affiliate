@@ -1,12 +1,8 @@
 @extends('photogallery.master')
 
-<body>
-    </div>
 
+  
 
-    <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-        <!DOCTYPE html>
-        <html lang="en">
 
         <head>
             <meta charset="utf-8" />
@@ -22,9 +18,33 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
             <!-- Core theme CSS (includes Bootstrap)-->
             <link href="css/styles.css" rel="stylesheet" />
+            <style>
+                :root,
+                :root.light {
+                    --color-bg: #ffffff;
+                    --color-fg: #000000;
+                    --card-bg-color: #fafafa;
+                }
+
+                :root.dark {
+                    --color-bg: #263238;
+                    --color-fg: #ffffff;
+                    --card-bg-color: #607d8b;
+                }
+
+                body {
+                    background-color: var(--color-bg);
+                    color: var(--color-fg);
+                }
+
+                #theme {
+                    background-color: var(--card-bg-color) !important;
+                }
+            </style>
         </head>
 
-        <body>
+        <body id="theme">
+
             <!-- Navigation-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container px-4 px-lg-5">
@@ -104,12 +124,20 @@
                 </div>
             </header>
             <!-- Section-->
+
+            <div class="form-switch text-center my-5">
+                <input type="checkbox" id="mode" class="form-check-input">change theme
+                <label for="mode" class="form-check-label" ></label>
+              </div>
             <div class="d-flex justify-content-center">
-                
+
                 @auth
-                @if (Auth::user()->user_type == 1)
-                <h3 class="d-flex justify-content-center mt-2 mb-2" >Welcome Admin</h3>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    <a class="btn btn-success mt-2" href={{ route('index') }}> <h4> click here to go dashboard </h3></a>
+                    @if (Auth::user()->user_type == 1)
+                        <h3 class="d-flex justify-content-center mt-2 mb-2">Welcome Admin</h3>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                        <a class="btn btn-success mt-2" href={{ route('index') }}>
+                            <h4> click here to go dashboard </h3>
+                        </a>
                     @endif
                 @endauth
             </div>
@@ -165,10 +193,11 @@
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
                                             <i class="fa fa-star"></i>
-                                            
+
                                         </div>
-                                        <h6 class="text-muted ml-1"> ratings: 4/5</h6>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                                       
+                                        <h6 class="text-muted ml-1"> ratings: 4/5</h6>
+                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
                                     </div>
                                     <div class="image">
                                         <a href={{ route('show', $row->id) }}>
@@ -184,7 +213,8 @@
 
 
                         <p> owned by : {{ $row->user->name }}</p>
-                        <h6 class="text-muted ml-1">created at: {{ \Carbon\Carbon::parse($row->created_at)->diffForHumans() }}</h6>
+                        <h6 class="text-muted ml-1">created at:
+                            {{ \Carbon\Carbon::parse($row->created_at)->diffForHumans() }}</h6>
                         @foreach ($transactions as $key => $value)
                         @endforeach
                         @if (Route::has('login'))
@@ -193,7 +223,6 @@
                                         download
                                     </a></button>
                             @elseif (!Route::has('login'))
-                            
                                 <button class="btn btn-danger"><a href={{ route('login', $row->id) }}>
                                         add to cart
                                     </a></button>
@@ -237,6 +266,32 @@
     <!-- Core theme JS-->
     <script src="{{ asset('js/share.js') }}"></script>
 
+    <script>
+        const modeBtn = document.getElementById('mode');
+        modeBtn.onchange = (e) => {
+            if (modeBtn.checked === true) {
+                document.documentElement.classList.remove("light")
+                document.documentElement.classList.add("dark")
+                window.localStorage.setItem('mode', 'dark');
+            } else {
+                document.documentElement.classList.remove("dark")
+                document.documentElement.classList.add("light")
+                window.localStorage.setItem('mode', 'light');
+            }
+        }
 
+        const mode = window.localStorage.getItem('mode');
+        if (mode == 'dark') {
+            modeBtn.checked = true;
+            document.documentElement.classList.remove("light")
+            document.documentElement.classList.add("dark")
+        }
+
+        if (mode == 'light') {
+            modeBtn.checked = false;
+            document.documentElement.classList.remove("dark")
+            document.documentElement.classList.add("light")
+        }
+    </script>
     </div>
     </div>
