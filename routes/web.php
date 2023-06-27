@@ -49,7 +49,7 @@ Route::get('/create', [PhotoController::class, 'index'])->name('create');
 Route::post('/add-photo', [PhotoController::class, 'store'])->name('store.photo');
 Route::get('/show/{id}', [PhotoController::class, 'show'])->name('show');
 Route::delete('/show/delete/{id}', [PhotoController::class, 'destroy'])->name('delete');
-Route::get('/edit', [PhotoController::class, 'edit'])->name('edit');
+Route::get('/edit/{id}', [PhotoController::class, 'edit'])->name('edit');
 Route::post('/update/{id}', [PhotoController::class, 'update'])->name('update');
 Route::get('/purchase/{id}', [PhotoController::class, 'wallet'])->name('wallet');
 Route::get('/transaction/{id}', [PhotoController::class, 'transaction'])->name('transaction');

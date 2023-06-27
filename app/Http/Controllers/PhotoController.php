@@ -137,7 +137,7 @@ class PhotoController extends Controller
     $wallet = Image::with('user')->get();
     return view('show')->with('posts', $posts)->with('wallet', $wallet);
   }
-  public function edit($id)
+  public function edit(Request $request, $id)
   {
     $posts = DB::table('images')->where('id', $id)->get();
 
@@ -151,9 +151,10 @@ class PhotoController extends Controller
       $imageName = time() . '.' . $request->file->extension();
       $image->move(public_path('images/'), $imageName);
       $image = $request->file('image')->getClientOriginalName();
-
+      
       $postData = ['title' => $request->title, 'price' => $request->price, 'tags' => $request->tags, 'imagename' => $imageName, 'user_id' => Auth::id()];
-
+      
+      dd($posts);
       $posts->update($postData);
     }
     return redirect('/')->with(['message' => 'photo updated successfully!', 'status' => 'info']);
@@ -230,7 +231,7 @@ class PhotoController extends Controller
       }
     } else {
 
-      return redirect('/')->with(['message' => 'sorry you dont have enough coin to buy!', 'status' => 'info']);
+      return redirect('/')->with(['message' => 'sorry you dont have enough coin to buy ! ', 'status' => 'info']);
 
 
     }
